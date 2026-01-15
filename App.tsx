@@ -71,7 +71,7 @@ const App: React.FC = () => {
       setState(prev => ({ ...prev, isRecording: true, error: null }));
     } catch (err) {
       console.error("Recording error:", err);
-      setState(prev => ({ ...prev, error: "ACCESS DENIED: MICROPHONE UNAVAILABLE" }));
+      setState(prev => ({ ...prev, error: "MIC_ACCESS_DENIED: Please enable microphone permissions." }));
     }
   };
 
@@ -101,6 +101,7 @@ const App: React.FC = () => {
     try {
       let inputSource: any;
       if (state.inputMode === 'text') {
+        if (!state.inputText.trim()) throw new Error("Please enter some text first.");
         inputSource = state.inputText;
       } else if (state.audioBlob) {
         const base64 = await blobToBase64(state.audioBlob);
@@ -109,7 +110,7 @@ const App: React.FC = () => {
           mimeType: state.audioBlob.type || 'audio/webm'
         };
       } else {
-        throw new Error("EMPTY_INPUT");
+        throw new Error("No input provided. Please record audio or paste text.");
       }
 
       const stream = generateMinutesStream(inputSource);
@@ -129,7 +130,11 @@ const App: React.FC = () => {
         }
       }));
     } catch (err: any) {
-      setState(prev => ({ ...prev, isGenerating: false, error: err.message || "SYSTEM_FAILURE: PROCESSING_INTERRUPTED" }));
+      let errorMessage = err.message || "An unexpected error occurred.";
+      if (errorMessage.includes("API_KEY_MISSING")) {
+        errorMessage = "MISSING API KEY: Go to Vercel Settings > Environment Variables and add API_KEY.";
+      }
+      setState(prev => ({ ...prev, isGenerating: false, error: errorMessage }));
     }
   };
 
@@ -147,7 +152,7 @@ const App: React.FC = () => {
         }
       }));
     } catch (err: any) {
-      setState(prev => ({ ...prev, error: "EXTENSION_ERROR" }));
+      setState(prev => ({ ...prev, error: "Failed to generate expanded content." }));
     } finally {
       setIsLoadingExtra(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -162,11 +167,14 @@ const App: React.FC = () => {
         </div>
         
         {state.error && (
-          <div className="mb-10 p-5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-3xl flex items-center space-x-4 no-print animate-pulse">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <p className="font-black text-xs uppercase tracking-widest">{state.error}</p>
+          <div className="mb-10 p-6 bg-red-500/10 border border-red-500/30 text-red-200 rounded-3xl flex flex-col space-y-2 no-print">
+            <div className="flex items-center space-x-3">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p className="font-black text-xs uppercase tracking-widest">System Alert</p>
+            </div>
+            <p className="text-sm opacity-80">{state.error}</p>
           </div>
         )}
 
@@ -191,8 +199,8 @@ const App: React.FC = () => {
         {(state.isGenerating || previewContent) && !state.result && (
           <MinutesDisplay 
             result={{
-              content: previewContent || '...',
-              timestamp: 'INITIALIZING BUFFER',
+              content: previewContent || 'Synthesizing input...',
+              timestamp: 'In Progress',
               type: 'standard'
             }} 
             onExtraFeature={() => {}}
@@ -224,7 +232,7 @@ const App: React.FC = () => {
       </div>
       
       <footer className="mt-32 text-center text-white/10 text-[10px] no-print uppercase tracking-[0.6em] font-black">
-        <p>&copy; {new Date().getFullYear()} MINICO ELITE • SYNTHESIZED BY GEMINI 3</p>
+        <p>&copy; {new Date().getFullYear()} MINICO ELITE • POWERED BY GEMINI</p>
       </footer>
     </div>
   );

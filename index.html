@@ -16,6 +16,7 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-deep);
             color: #ffffff;
+            margin: 0;
         }
         .soft-horizon {
             background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
@@ -50,11 +51,10 @@
             font-family: 'Playfair Display', serif;
         }
         
-        /* Print Styles - Revert to professional white for paper output */
+        /* Print Styles */
         @media print {
             body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
-            .print-only { display: block !important; }
             .document-sheet {
                 box-shadow: none !important;
                 border: none !important;
@@ -69,14 +69,12 @@
             }
         }
         
-        /* Document styling for screen */
         .document-sheet {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             min-height: 297mm;
         }
 
-        /* Abstract Glow Backgrounds */
         .bg-glow-orange {
             position: fixed;
             width: 600px;
@@ -101,6 +99,7 @@
 <script type="importmap">
 {
   "imports": {
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "@google/genai": "https://esm.sh/@google/genai@^1.36.0",
     "react/": "https://esm.sh/react@^19.2.3/",
@@ -113,5 +112,7 @@
     <div class="bg-glow-orange"></div>
     <div class="bg-glow-purple"></div>
     <div id="root"></div>
+    <!-- Crucial entry point for deployment -->
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>
