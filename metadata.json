@@ -1,0 +1,7 @@
+{
+  "name": "Minico",
+  "description": "Premium AI-powered meeting minutes for the modern professional. Elegant, fast, and institutional-grade.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

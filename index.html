@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minico - Elite Meeting Minutes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #000000;
+            --accent-glow: radial-gradient(circle at 50% 50%, #ff5c00 0%, #ff005c 50%, #000000 100%);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: #ffffff;
+        }
+        .soft-horizon {
+            background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .soft-horizon::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            filter: blur(20px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-button {
+            background: #ffffff;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Print Styles - Revert to professional white for paper output */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .document-sheet {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                background: white !important;
+                color: black !important;
+            }
+            @page {
+                margin: 2cm;
+            }
+        }
+        
+        /* Document styling for screen */
+        .document-sheet {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 297mm;
+        }
+
+        /* Abstract Glow Backgrounds */
+        .bg-glow-orange {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 92, 0, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -200px;
+            left: -200px;
+            z-index: -1;
+            filter: blur(80px);
+        }
+        .bg-glow-purple {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -300px;
+            right: -300px;
+            z-index: -1;
+            filter: blur(80px);
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.36.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3"
+  }
+}
+</script>
+</head>
+<body class="selection:bg-white selection:text-black overflow-x-hidden">
+    <div class="bg-glow-orange"></div>
+    <div class="bg-glow-purple"></div>
+    <div id="root"></div>
+</body>
+</html>
